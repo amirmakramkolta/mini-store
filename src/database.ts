@@ -8,7 +8,7 @@ dotenv.config();
 
 let connection:DataSource
 
-if(process.env.env_node=="dev"){
+if(process.env.env_node == "dev"){
     connection = new DataSource({
         type:"mysql",
         port:parseInt(process.env.port as string),
@@ -25,8 +25,9 @@ if(process.env.env_node=="dev"){
         username:process.env.user,
         password:process.env.password,
         database:process.env.database_test,
-        entities:[User],
-        synchronize:true
+        entities:[User, Product],
+        synchronize:true,
+        dropSchema:true
     })
 }
 

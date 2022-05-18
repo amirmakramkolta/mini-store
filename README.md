@@ -87,3 +87,6 @@ To delete a product, send a DELETE request with product id in paraments body con
 if everything is okay, you will get:
 - id (id of the deleted product )
 - status (deleted)
+
+## Tests
+their is some tests on user endpoints, to test them, run `npm run test`

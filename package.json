@@ -7,6 +7,7 @@
     "build": "npx tsc",
     "jasmine": "jasmine",
     "pre-test": "npm run build && npm run jasmine",
+    "test": "set env_node=test && npm run pre-test",
     "start": "nodemon src/index.ts",
     "clear-test-db": "db-migrate --env test reset"
   },
