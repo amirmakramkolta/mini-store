@@ -12,15 +12,16 @@ this is an app made for an mini store and have only 2 entities (User, Products)
 ## setup the app before start
 
 - define a .env file set the variables in it, variables name are:
-    * host
-    * port
-    * user
-    * password
-    * database
-    * env_node `for development mode set it with "dev"`
-    * salt `for password encryption`
-    * pepper `for password encryption`
-    * secret `for token`
+    * HOST
+    * PORT
+    * USER
+    * PASSWORD
+    * DATABASE
+    * DATABASE_TEST
+    * ENV_NODE `for development mode set it with "dev"`
+    * SALT `for password encryption`
+    * PEPPER `for password encryption`
+    * SECRET `for token`
 - run `npm i` to get all packages
 - to start the app, run `npm run start`
 - it will run on port `5000`

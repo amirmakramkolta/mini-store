@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 import bycrypt from 'bcrypt'
 import express from 'express';
-import User from '../entities/User';
+import User from '../models/User';
 
 dotenv.config();
 

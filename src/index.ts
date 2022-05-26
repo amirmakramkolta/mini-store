@@ -2,8 +2,8 @@ import connection from "./database";
 import express from "express";
 import {json} from 'body-parser';
 import cors from 'cors'
-import { UserRoutes } from "./handlers/UserEndpoints";
-import { ProductRoutes } from "./handlers/ProductEndpoints";
+import { UserRoutes } from "./controllers/UserEndpoints";
+import { ProductRoutes } from "./controllers/ProductEndpoints";
 
 
 const app = express();

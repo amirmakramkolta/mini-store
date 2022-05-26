@@ -1,5 +1,5 @@
 import app from "supertest";
-import { UserRoutes } from "../../handlers/UserEndpoints";
+import { UserRoutes } from "../../controllers/UserEndpoints";
 
 const data1 = {
     firstname: "asd",
