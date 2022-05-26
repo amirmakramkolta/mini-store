@@ -4,31 +4,24 @@ import express from 'express';
 import User from '../models/User';
 import Product from '../models/Product';
 import connection from '../database';
+import { authorization, authentication } from '../middlewares/auth';
 
 dotenv.config();
 
 export const ProductRoutes = (app:express.Router)=>{
     // to create
-    app.post("/create-product",async(req,res)=>{
+    app.post("/create-product",authorization(),async(req,res)=>{
         const {
             name,
             price,
-            imageUrl,
-            token
+            imageUrl
         } = req.body;
 
-        try{
-            jwt.verify(token,(process.env.secret as string))
-        }catch(err){
-            console.log(err)
-            res.status(403);
-            res.json(`something wrong in JWT`)
-            return
-        }
+        const {authorization} = req.headers
 
         try{
 
-            const userData = jwt.decode(token);
+            const userData = jwt.decode(authorization as string);
 
             if(userData == null){
                 res.status(400);
@@ -59,8 +52,7 @@ export const ProductRoutes = (app:express.Router)=>{
                 id:newProduct.id,
                 name,
                 price,
-                imageUrl,
-                token
+                imageUrl
             })
 
         }catch(err){
@@ -91,64 +83,14 @@ export const ProductRoutes = (app:express.Router)=>{
         }
     })
     // to edit
-    app.put("/edit-product",async(req,res)=>{
+    app.put("/edit-product/:id",authorization(),authentication(),async(req,res)=>{
         const{
-            id,
             name,
             price,
-            imageUrl,
-            token
+            imageUrl
         } = req.body
-
+        const {id} = req.params
         try{
-            jwt.verify(token,(process.env.secret as string))
-        }catch(err){
-            console.log(err)
-            res.status(403);
-            res.json(`something wrong in JWT`)
-            return
-        }
-
-        try{
-
-            const userData = jwt.decode(token);
-
-            if(userData == null){
-                res.status(400);
-                res.json("something wrong with data")
-                return
-            }
-
-            const stringData = userData as jwt.JwtPayload
-            const user = await User.findOneBy({id:(stringData.id as string)});
-
-            if(user==null){
-                res.status(400);
-                res.json("User not found")
-                return
-            }
-
-            const product = await Product.findOne({
-                relations:{
-                    user:true
-                },
-                select:{
-                    id:true,
-                    user:{
-                        id:true,
-                    }
-                },
-                where:{
-                    id
-                }
-            })
-
-            if(user.id!=product?.user.id){
-                res.status(401)
-                res.send("you can edit on this product by this user")
-                return
-            }
-
             await connection.createQueryBuilder()
                 .update(Product)
                 .set({
@@ -162,8 +104,7 @@ export const ProductRoutes = (app:express.Router)=>{
 
             res.status(200)
             res.json({
-                ...productToGo,
-                token
+                ...productToGo
             })
         }catch(err){
             console.log(err)
@@ -172,59 +113,10 @@ export const ProductRoutes = (app:express.Router)=>{
         }
     })
     // to delete
-    app.delete("/delete-product/:id",async(req,res)=>{
+    app.delete("/delete-product/:id",authorization(),async(req,res)=>{
         const {id} = req.params;
-        const {token} = req.body;
 
         try{
-            jwt.verify(token,(process.env.secret as string))
-        }catch(err){
-            console.log(err)
-            res.status(403);
-            res.json(`something wrong in JWT`)
-            return
-        }
-
-        try{
-
-            const userData = jwt.decode(token);
-
-            if(userData == null){
-                res.status(400);
-                res.json("something wrong with data")
-                return
-            }
-
-            const stringData = userData as jwt.JwtPayload
-            const user = await User.findOneBy({id:(stringData.id as string)});
-
-            if(user==null){
-                res.status(400);
-                res.json("User not found")
-                return
-            }
-
-            const product = await Product.findOne({
-                relations:{
-                    user:true
-                },
-                select:{
-                    id:true,
-                    user:{
-                        id:true,
-                    }
-                },
-                where:{
-                    id
-                }
-            })
-
-            if(user.id!=product?.user.id){
-                res.status(401)
-                res.send("you can delete on this product by this user")
-                return
-            }
-
             await Product.delete(id)
 
             res.status(200)

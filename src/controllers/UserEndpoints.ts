@@ -20,12 +20,12 @@ export const UserRoutes = (app:express.Router) => {
                 first_name: firstName as string,
                 last_name: lastName as string,
                 email: (email as string).toLowerCase(),
-                password: bycrypt.hashSync(password + process.env.pepper, parseInt(process.env.salt as string))
+                password: bycrypt.hashSync(password + process.env.PEPPER, parseInt(process.env.SALT as string))
             });
 
             await newUser.save();
 
-            const token = jwt.sign({id:newUser.id, email:newUser.email},(process.env.secret as string));
+            const token = jwt.sign({id:newUser.id, email:newUser.email},(process.env.SECRET as string));
 
             res.status(200);
             res.json({
@@ -49,11 +49,11 @@ export const UserRoutes = (app:express.Router) => {
             if(user==null){
                 res.status(404);
                 res.send("sorry user or password are invaled")
-            }else if(!bycrypt.compareSync(password+process.env.pepper, user.password)){
+            }else if(!bycrypt.compareSync(password+process.env.PEPPER, user.password)){
                 res.status(404);
                 res.send("sorry user or password are invaled")
             }else{
-                const token = jwt.sign({id:user.id, email:user.email},(process.env.secret as string));
+                const token = jwt.sign({id:user.id, email:user.email},(process.env.SECRET as string));
                 res.status(200);
                 res.json({
                     token

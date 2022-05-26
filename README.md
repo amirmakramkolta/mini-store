@@ -50,7 +50,8 @@ To create new product, send POST request with body contains:
 - name
 - price
 - imageUrl (optinal)
-- token
+
+and header contains the token as authentication
 
 if everything is okay, you will get:
 - id
@@ -60,19 +61,20 @@ if everything is okay, you will get:
 - token
 
 ### /get-product/:id
-To get a product, use product id as a parameters with no body and send a GET request, you will get:
+To get a product, use product id as a parameter with no body and send a GET request, you will get:
 - id
 - name
 - price
 - imageUrl (if exist)
 
-### /edit-product
-To edit a product, send a PUT requset with body contains:
-- id
+### /edit-product/:id
+To edit a product, use product id as a parameter send a PUT requset with body contains:
 - name (optional)
 - price (optional)
 - imageUrl (optional)
 - token
+
+and header contains the token as authentication
 
 if everything is okay, you will get:
 - id
@@ -82,8 +84,8 @@ if everything is okay, you will get:
 - token
 
 ### /delete-product/:id
-To delete a product, send a DELETE request with product id in paraments body contains:
-- token
+To delete a product, send a DELETE request with product id in paraments
+and header contains the token as authentication
 
 if everything is okay, you will get:
 - id (id of the deleted product )
