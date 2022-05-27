@@ -5,12 +5,17 @@ import User from '../models/User';
 import Product from '../models/Product';
 import connection from '../database';
 import { authorization, authentication } from '../middlewares/auth';
+import { createProductValidation, deleteProductValidation, getProductValidation } from '../middlewares/validation';
+import { validate } from 'express-validation';
 
 dotenv.config();
 
 export const ProductRoutes = (app:express.Router)=>{
     // to create
-    app.post("/create-product",authorization(),async(req,res)=>{
+    app.post("/create-product",
+    validate(createProductValidation()),
+    authorization(),
+      async(req:express.Request,res:express.Response)=>{
         const {
             name,
             price,
@@ -63,7 +68,7 @@ export const ProductRoutes = (app:express.Router)=>{
 
     })
     // to get by id
-    app.get("/get-product/:id",async(req,res)=>{
+    app.get("/get-product/:id",validate(getProductValidation()),async(req,res)=>{
         const {id} = req.params;
         try{
             const product = await Product.findOneBy({
@@ -113,7 +118,10 @@ export const ProductRoutes = (app:express.Router)=>{
         }
     })
     // to delete
-    app.delete("/delete-product/:id",authorization(),async(req,res)=>{
+    app.delete("/delete-product/:id",
+    validate(deleteProductValidation()),
+    authorization(),
+    async(req,res)=>{
         const {id} = req.params;
 
         try{
