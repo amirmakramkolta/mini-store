@@ -3,11 +3,13 @@ import jwt from 'jsonwebtoken';
 import bycrypt from 'bcrypt'
 import express from 'express';
 import User from '../models/User';
+import { validate } from 'express-validation';
+import { createUserValidation, signinValidation } from '../middlewares/validation';
 
 dotenv.config();
 
 export const UserRoutes = (app:express.Router) => {
-    app.post("/create-user",async (req,res)=>{
+    app.post("/create-user",validate(createUserValidation(),{},{}),async (req,res)=>{
         const {
             firstName,
             lastName,
@@ -38,7 +40,7 @@ export const UserRoutes = (app:express.Router) => {
             res.send("Something happened wrong")
         }
     });
-    app.post("/signin",async(req,res)=>{
+    app.post("/signin",validate(signinValidation(),{},{}),async(req,res)=>{
         const {
             email,
             password

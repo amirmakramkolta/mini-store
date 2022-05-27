@@ -2,6 +2,7 @@ import connection from "./database";
 import express from "express";
 import {json} from 'body-parser';
 import cors from 'cors'
+import {ValidationError} from "express-validation";
 import { UserRoutes } from "./controllers/UserEndpoints";
 import { ProductRoutes } from "./controllers/ProductEndpoints";
 
@@ -15,6 +16,13 @@ connection.initialize()
         console.log("Connceted to database")
         app.use(json())
         app.use(cors())
+        app.use(function(err: Error, req:express.Request, res:express.Response, next:express.NextFunction) {
+            if (err instanceof ValidationError) {
+              return res.status(err.statusCode).json(err)
+            }
+          
+            return res.status(500).json(err)
+          })
         
         UserRoutes(app);
         ProductRoutes(app);
