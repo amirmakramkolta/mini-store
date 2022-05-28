@@ -5,7 +5,7 @@ import User from '../models/User';
 import Product from '../models/Product';
 import connection from '../database';
 import { authorization, authentication } from '../middlewares/auth';
-import { createProductValidation, deleteProductValidation, getProductValidation } from '../middlewares/validation';
+import { createProductValidation, deleteProductValidation, editProductValidation, getProductValidation } from '../middlewares/validation';
 import { validate } from 'express-validation';
 
 dotenv.config();
@@ -88,7 +88,11 @@ export const ProductRoutes = (app:express.Router)=>{
         }
     })
     // to edit
-    app.put("/edit-product/:id",authorization(),authentication(),async(req,res)=>{
+    app.put("/edit-product/:id",
+    validate(editProductValidation()),
+    authorization(),
+    authentication(),
+    async(req,res)=>{
         const{
             name,
             price,
