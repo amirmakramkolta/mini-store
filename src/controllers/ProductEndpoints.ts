@@ -4,7 +4,7 @@ import express from 'express';
 import User from '../models/User';
 import Product from '../models/Product';
 import connection from '../database';
-import { authorization, authentication } from '../middlewares/auth';
+import { authentication, authorization } from '../middlewares/auth';
 import { createProductValidation, deleteProductValidation, editProductValidation, getProductValidation } from '../middlewares/validation';
 import { validate } from 'express-validation';
 
@@ -14,7 +14,7 @@ export const ProductRoutes = (app:express.Router)=>{
     // to create
     app.post("/create-product",
     validate(createProductValidation()),
-    authorization(),
+    authentication(),
       async(req:express.Request,res:express.Response)=>{
         const {
             name,
@@ -90,8 +90,8 @@ export const ProductRoutes = (app:express.Router)=>{
     // to edit
     app.put("/edit-product/:id",
     validate(editProductValidation()),
-    authorization(),
     authentication(),
+    authorization(),
     async(req,res)=>{
         const{
             name,
@@ -124,6 +124,7 @@ export const ProductRoutes = (app:express.Router)=>{
     // to delete
     app.delete("/delete-product/:id",
     validate(deleteProductValidation()),
+    authentication(),
     authorization(),
     async(req,res)=>{
         const {id} = req.params;

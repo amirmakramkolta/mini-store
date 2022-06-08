@@ -6,7 +6,7 @@ import Product from '../models/Product';
 
 dotenv.config();
 
-export function authorization(){
+export function authentication(){
     return (req:express.Request, res:express.Response, next: express.NextFunction)=>{
 
         const {authorization} = req.headers;
@@ -20,7 +20,6 @@ export function authorization(){
                     res.status(400).send("bad request");
                     return;
                 }else{
-                    
                     next();
                 }
             })
@@ -29,7 +28,7 @@ export function authorization(){
     }
 }
 
-export function authentication(){
+export function authorization(){
     return async (req: express.Request, res: express.Response, next: express.NextFunction)=>{
 
         const {authorization} = req.headers;
